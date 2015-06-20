@@ -1,0 +1,9 @@
+# ignore intellij files
+/.idea
+/*.iml
+/*.ipr
+/*.iws
+
+# ignore generate files
+/elm-stuff
+/elm.js
