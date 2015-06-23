@@ -1,5 +1,5 @@
 module Page.Calendar
-  ( Action, Model, view, update, init
+  ( Action, Model, view, update, init, emptyModel
   ) where
 
 import Html exposing (..)

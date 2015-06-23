@@ -1,7 +1,8 @@
 module Main where
 
 import Html exposing (..)
-import Page.Calendar as CalendarPage
+import Page.Calendar
+import Page.Edit
 import Moment exposing (Moment)
 
 
@@ -9,20 +10,27 @@ import Moment exposing (Moment)
 
 
 type alias Model =
-  { calendar : CalendarPage.Model
+  { calendar : Page.Calendar.Model
+  , edit     : Page.Edit.Model
   }
 
 
 emptyModel : Model
 emptyModel =
-  { calendar = CalendarPage.init Moment.epocStart
+  { calendar = Page.Calendar.emptyModel
+  , edit     = Page.Edit.emptyModel
   }
 
 
 init : Moment -> Model
 init now =
-  { calendar = CalendarPage.init now
-  }
+  let title       = ""
+      description = ""
+      location    = ""
+  in
+    { calendar = Page.Calendar.init now
+    , edit     = Page.Edit.init now now title description location
+    }
 
 
 ---- UPDATE ----
@@ -30,19 +38,23 @@ init now =
 
 type Action
   = NoOp
-  | Calendar CalendarPage.Action
+  | Calendar Page.Calendar.Action
+  | Edit Page.Edit.Action
 
 
 update : Action -> Model -> Model
 update action model =
   case action of
-    NoOp -> model
+    NoOp         -> model
+    Calendar act -> { model | calendar <- Page.Calendar.update act model.calendar }
+    Edit act     -> { model | edit <- Page.Edit.update act model.edit }
 
 
 view : Signal.Address Action -> Model -> Html
 view address model =
   div [] [
-    CalendarPage.view (Signal.forwardTo address Calendar) model.calendar
+    Page.Calendar.view (Signal.forwardTo address Calendar) model.calendar
+    , Page.Edit.view (Signal.forwardTo address Edit) model.edit
     , text "hello"
   ]
 
