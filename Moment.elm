@@ -5,6 +5,7 @@ module Moment
   , get, millisecond, second, minute, hour, dateOfMonth, dayOfWeek, month, year
   , set, setMillisecond, setSecond, setMinute, setHour, setDateOfMonth, setDayOfWeek, setMonth, setYear
   , midnight, lastDateOfMonth
+  , epocStart
   , add
   , toString
   ) where
@@ -23,6 +24,10 @@ type Unit = Millisecond
   | DayOfWeek
   | Month
   | Year
+
+epocStart : Moment
+epocStart =
+  unix 0
 
 ---- FACTORY ----
 
@@ -177,6 +182,8 @@ subtract value unit moment =
 toString : Moment -> String
 toString =
   Native.Moment.toString
+
+
 
 
 

@@ -1,8 +1,11 @@
-module Calendar where
+module Page.Calendar
+  ( Action, Model, view, update, init
+  ) where
 
 import Html exposing (..)
 import DatePicker
 import Moment exposing (Moment)
+import DatePicker exposing (Model, Action(..), view, update)
 
 ---- MODEL ----
 
@@ -11,14 +14,9 @@ type alias Model =
   }
 
 
-epocStart : Moment
-epocStart =
-  Moment.unix 0
-
-
 emptyModel : Model
 emptyModel =
-  { now = epocStart }
+  { now = Moment.epocStart }
 
 
 init : Moment -> Model
@@ -75,30 +73,3 @@ view address model =
     ]
 
 
--- INPUTS --
-
-
-main : Signal Html
-main =
-  Signal.map (view actions.address) model
-
-
-model : Signal Model
-model =
-  Signal.foldp update initialModel actions.signal
-
-
-initialModel : Model
-initialModel =
-  let n = now
-  in case n of
-    Just value -> init (Moment.unix value)
-    Nothing -> emptyModel
-
-
-actions : Signal.Mailbox Action
-actions =
-  Signal.mailbox NoOp
-
-
-port now : Maybe Int
